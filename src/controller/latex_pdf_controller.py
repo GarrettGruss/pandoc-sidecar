@@ -1,0 +1,1 @@
+"""Controller to expose latex-pdf services and catch errors."""

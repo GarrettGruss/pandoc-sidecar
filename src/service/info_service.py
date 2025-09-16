@@ -1,0 +1,1 @@
+"""Service to get info about pandoc, such as info, available formats, installed libraries, etc."""

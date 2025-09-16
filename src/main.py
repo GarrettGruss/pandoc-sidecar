@@ -42,3 +42,8 @@ async def main():
 </body>
     """
     return HTMLResponse(content=content)
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    return {"status": "healthy", "service": "pandoc-sidecar"}

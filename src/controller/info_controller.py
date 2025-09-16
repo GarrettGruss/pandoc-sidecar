@@ -1,0 +1,1 @@
+"""Controller to expose the info service."""
