@@ -9,3 +9,8 @@ dependencies = [
     "uvicorn>=0.24.0",
     "python-multipart>=0.0.6",
 ]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.30.1",
+]

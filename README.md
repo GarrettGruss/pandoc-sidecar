@@ -5,3 +5,7 @@ This app is a exposes the pandoc/extra engine through a restful interface for us
 ## Resources
 
 - [multiple file uploads](https://fastapi.tiangolo.com/tutorial/request-files/#multiple-file-uploads)
+
+## Structure
+
+This app will be composed of a fastapi client and a pandoc/extra image running in seperate containers, but on the same deployment. They will be mounted to the same file store and will communicate via stdio.

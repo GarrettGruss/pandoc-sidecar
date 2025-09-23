@@ -1,0 +1,170 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\title{Pandoc LaTeX Example Document}
+\author{Example Author}
+\date{\today}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    commentstyle=\color{green},
+    numbers=left,
+    numberstyle=\tiny,
+    frame=single,
+    breaklines=true
+}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+This is an example LaTeX document demonstrating various features that can be rendered using pandoc with LaTeX. This document showcases mathematical equations, code listings, tables, and other common document elements.
+
+\section{Mathematical Expressions}
+
+\subsection{Inline Mathematics}
+Here's an inline equation: $E = mc^2$ and another one: $\sum_{i=1}^{n} x_i$.
+
+\subsection{Display Mathematics}
+Here's a display equation:
+\begin{equation}
+\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+\end{equation}
+
+Matrix example:
+\begin{equation}
+A = \begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{m1} & a_{m2} & \cdots & a_{mn}
+\end{pmatrix}
+\end{equation}
+
+\section{Code Examples}
+
+\subsection{Python Code}
+\begin{lstlisting}[language=Python, caption=Python example]
+def fibonacci(n):
+    """Generate Fibonacci sequence up to n terms."""
+    if n <= 0:
+        return []
+    elif n == 1:
+        return [0]
+    elif n == 2:
+        return [0, 1]
+
+    sequence = [0, 1]
+    for i in range(2, n):
+        sequence.append(sequence[i-1] + sequence[i-2])
+
+    return sequence
+
+# Example usage
+print(fibonacci(10))
+\end{lstlisting}
+
+\subsection{JavaScript Code}
+\begin{lstlisting}[language=JavaScript, caption=JavaScript example]
+function quickSort(arr) {
+    if (arr.length <= 1) {
+        return arr;
+    }
+
+    const pivot = arr[Math.floor(arr.length / 2)];
+    const left = arr.filter(x => x < pivot);
+    const middle = arr.filter(x => x === pivot);
+    const right = arr.filter(x => x > pivot);
+
+    return [...quickSort(left), ...middle, ...quickSort(right)];
+}
+
+console.log(quickSort([3, 6, 8, 10, 1, 2, 1]));
+\end{lstlisting}
+
+\section{Tables}
+
+\begin{table}[h]
+\centering
+\caption{Sample Data Table}
+\begin{tabular}{|l|c|r|}
+\hline
+\textbf{Name} & \textbf{Age} & \textbf{Score} \\
+\hline
+Alice & 25 & 95.5 \\
+Bob & 30 & 87.2 \\
+Charlie & 22 & 92.8 \\
+Diana & 28 & 89.1 \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Lists}
+
+\subsection{Itemized List}
+\begin{itemize}
+    \item First item
+    \item Second item with \textbf{bold text}
+    \item Third item with \textit{italic text}
+    \item Fourth item with \texttt{monospace text}
+\end{itemize}
+
+\subsection{Enumerated List}
+\begin{enumerate}
+    \item First numbered item
+    \item Second numbered item
+        \begin{enumerate}
+            \item Nested item A
+            \item Nested item B
+        \end{enumerate}
+    \item Third numbered item
+\end{enumerate}
+
+\section{Text Formatting}
+
+This paragraph demonstrates various text formatting options:
+\begin{itemize}
+    \item \textbf{Bold text}
+    \item \textit{Italic text}
+    \item \texttt{Monospace/typewriter text}
+    \item \underline{Underlined text}
+    \item \textsc{Small caps text}
+    \item \textsuperscript{Superscript} and \textsubscript{subscript}
+\end{itemize}
+
+\section{Special Characters and Symbols}
+
+Mathematical symbols: $\alpha, \beta, \gamma, \delta, \epsilon, \pi, \sigma, \omega$
+
+Special characters: \&, \$, \%, \#, \_, \{, \}
+
+Quotation marks: ``double quotes'' and `single quotes'
+
+Em-dash: --- and en-dash: --
+
+\section{Cross-References}
+
+This document has multiple sections. For example, see Section~\ref{sec:conclusion} for the conclusion.
+
+You can also reference equations like Equation~\eqref{eq:integral} above.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+This example document demonstrates various LaTeX features that can be processed by pandoc. It includes mathematical equations, code listings, tables, lists, text formatting, and cross-references. This should provide a comprehensive test case for pandoc/LaTeX rendering capabilities.
+
+\end{document}
