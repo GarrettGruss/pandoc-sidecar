@@ -15,12 +15,24 @@ Before starting, ensure you have the following installed:
 
 ### 1. Pull the pandoc/extra:3.7 Image
 
+#### For x86_64 Systems (Intel/AMD)
 ```bash
 docker pull pandoc/extra:3.7
 ```
 
+#### For ARM64 Systems (Apple Silicon, Windows ARM64)
+The pandoc/extra:3.7 image is only available for x86_64 architecture. On ARM64 systems, you must use platform emulation:
+
+```bash
+# Pull with platform emulation for ARM64 systems
+docker pull --platform linux/amd64 pandoc/extra:3.7
+```
+
+**Note**: If you get an error like "no matching manifest for linux/arm64", this confirms you need the emulated x86_64 version.
+
 ### 2. Verify Installation
 
+#### For x86_64 Systems
 ```bash
 # Check if image is available locally
 docker images pandoc/extra:3.7
@@ -29,45 +41,77 @@ docker images pandoc/extra:3.7
 docker run --rm pandoc/extra:3.7 --version
 ```
 
+#### For ARM64 Systems (with emulation)
+```bash
+# Check if image is available locally
+docker images pandoc/extra:3.7
+
+# Test pandoc functionality with platform emulation
+docker run --platform linux/amd64 --rm pandoc/extra:3.7 --version
+```
+
 ### 3. Basic Usage Examples
 
 #### Convert LaTeX to PDF
+
+**For x86_64 Systems:**
 ```bash
 # Mount current directory and convert file
-docker run --rm -v $(pwd):/data pandoc/extra:3.7 \
-  /data/input.tex -o /data/output.pdf --pdf-engine=pdflatex
+docker run --rm -v $(pwd):/data pandoc/extra:3.7 test/data/basic_example.tex -o /data/output.pdf --pdf-engine=pdflatex
+```
+
+**For ARM64 Systems (with emulation):**
+```bash
+# Mount current directory and convert file with platform emulation
+docker run --platform linux/amd64 --rm -v $(pwd):/data pandoc/extra:3.7 test/data/basic_example.tex -o /data/output.pdf --pdf-engine=pdflatex
 ```
 
 #### Convert LaTeX to HTML
+
+**For x86_64 Systems:**
 ```bash
-docker run --rm -v $(pwd):/data pandoc/extra:3.7 \
-  /data/input.tex -o /data/output.html --standalone --mathjax
+docker run --rm -v $(pwd):/data pandoc/extra:3.7 test/data/basic_example.tex -o /data/output.html --standalone --mathjax
+```
+
+**For ARM64 Systems (with emulation):**
+```bash
+docker run --platform linux/amd64 --rm -v $(pwd):/data pandoc/extra:3.7 test/data/basic_example.tex -o /data/output.html --standalone --mathjax
 ```
 
 #### Convert LaTeX to Markdown
+
+**For x86_64 Systems:**
 ```bash
-docker run --rm -v $(pwd):/data pandoc/extra:3.7 \
-  /data/input.tex -o /data/output.md --from=latex --to=markdown
+docker run --rm -v $(pwd):/data pandoc/extra:3.7 test/data/basic_example.tex -o /data/output.md --from=latex --to=markdown
+```
+
+**For ARM64 Systems (with emulation):**
+```bash
+docker run --platform linux/amd64 --rm -v $(pwd):/data pandoc/extra:3.7 test/data/basic_example.tex -o /data/output.md --from=latex --to=markdown
 ```
 
 #### Convert LaTeX to DOCX
+
+**For x86_64 Systems:**
 ```bash
-docker run --rm -v $(pwd):/data pandoc/extra:3.7 \
-  /data/input.tex -o /data/output.docx
+docker run --rm -v $(pwd):/data pandoc/extra:3.7 test/data/basic_example.tex -o /data/output.docx
+```
+
+**For ARM64 Systems (with emulation):**
+```bash
+docker run --platform linux/amd64 --rm -v $(pwd):/data pandoc/extra:3.7 test/data/basic_example.tex -o /data/output.docx
 ```
 
 ### 4. Advanced Docker Usage
 
 #### With Custom Working Directory
 ```bash
-docker run --rm -v /path/to/your/files:/workdir pandoc/extra:3.7 \
-  /workdir/input.tex -o /workdir/output.pdf --pdf-engine=pdflatex
+docker run --rm -v /path/to/your/files:/workdir pandoc/extra:3.7 /workdir/input.tex -o /workdir/output.pdf --pdf-engine=pdflatex
 ```
 
 #### With Environment Variables
 ```bash
-docker run --rm -e PANDOC_VERSION=3.7 -v $(pwd):/data pandoc/extra:3.7 \
-  /data/input.tex -o /data/output.pdf
+docker run --rm -e PANDOC_VERSION=3.7 -v $(pwd):/data pandoc/extra:3.7 test/data/basic_example.tex -o /data/output.pdf
 ```
 
 ## Minikube Deployment
@@ -252,6 +296,10 @@ def convert_latex_to_pdf(input_file, output_file):
 1. **Permission Denied**: Ensure Docker has proper permissions to mount volumes
 2. **Pod Not Starting**: Check resource limits and image availability
 3. **Pandoc Errors**: Verify input file format and pandoc arguments
+4. **ARM64 Platform Issues**:
+   - If you get "no matching manifest for linux/arm64", use `--platform linux/amd64`
+   - Emulation performance may be 2-5x slower than native x86_64
+   - Increase timeout values for complex document conversions on ARM64 systems
 
 ### Debugging Commands
 
