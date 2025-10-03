@@ -1,0 +1,11 @@
+services:
+  pandoc-extra:
+    image: pandoc/extra:3.7
+    platform: linux/amd64
+    container_name: pandoc
+    volumes:
+      - pandoc-data:/input
+      - pandoc-data:/output
+
+volumes:
+  pandoc-data:
