@@ -1,1 +1,0 @@
-"""Response models that the fastapi service will consume."""
