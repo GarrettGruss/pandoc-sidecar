@@ -59,12 +59,14 @@ class PandocService:
                 content = await file.read()
                 f.write(content)
 
-            saved_files.append({
-                "filename": new_filename,
-                "original_filename": file.filename,
-                "path": str(file_path),
-                "size": len(content)
-            })
+            saved_files.append(
+                {
+                    "filename": new_filename,
+                    "original_filename": file.filename,
+                    "path": str(file_path),
+                    "size": len(content),
+                }
+            )
 
         if not saved_files:
             raise HTTPException(status_code=400, detail="No files were uploaded")
@@ -80,12 +82,18 @@ class PandocService:
         # Get absolute workspace path
         workspace = os.path.abspath(str(self.upload_dir))
 
-        cmd = ['docker-compose', 'run', '--rm',
-               '-v', f'{workspace}:/workspace',
-               'pandoc-extra',
-               f'/workspace/{input_path.name}',
-               '-o', f'/workspace/{output_filename}',
-               '--pdf-engine=pdflatex']
+        cmd = [
+            "docker-compose",
+            "run",
+            "--rm",
+            "-v",
+            f"{workspace}:/workspace",
+            "pandoc-extra",
+            f"/workspace/{input_path.name}",
+            "-o",
+            f"/workspace/{output_filename}",
+            "--pdf-engine=pdflatex",
+        ]
 
         try:
             subprocess.run(cmd, capture_output=True, text=True, check=True)
@@ -99,20 +107,27 @@ class PandocService:
                 return FileResponse(
                     path=str(output_path),
                     filename=output_filename,
-                    media_type='application/pdf'
+                    media_type="application/pdf",
                 )
             else:
                 # Cleanup input file even if output failed
                 self.cleanup_files(input_path)
-                raise HTTPException(status_code=500, detail="PDF generation failed - output file not found")
+                raise HTTPException(
+                    status_code=500,
+                    detail="PDF generation failed - output file not found",
+                )
 
         except subprocess.CalledProcessError as e:
             # Cleanup input file on error
             self.cleanup_files(input_path)
             error_details = e.stderr if e.stderr else str(e)
-            raise HTTPException(status_code=500, detail=f"Pandoc conversion failed: {error_details}")
+            raise HTTPException(
+                status_code=500, detail=f"Pandoc conversion failed: {error_details}"
+            )
 
-    async def upload_files(self, background_tasks: BackgroundTasks, files: list[UploadFile] = File(...)):
+    async def upload_files(
+        self, background_tasks: BackgroundTasks, files: list[UploadFile] = File(...)
+    ):
         """Upload multiple files and convert the first one to PDF"""
         saved_files = await self.save_uploaded_files(files)
 

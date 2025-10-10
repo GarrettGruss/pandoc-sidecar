@@ -14,7 +14,9 @@ async def health_check():
 
 
 @app.post("/upload")
-async def upload_files(background_tasks: BackgroundTasks, files: list[UploadFile] = File(...)):
+async def upload_files(
+    background_tasks: BackgroundTasks, files: list[UploadFile] = File(...)
+):
     """Upload multiple files and convert to PDF using Pandoc"""
     service = PandocService()
     return await service.upload_files(background_tasks, files)
@@ -32,5 +34,5 @@ async def convert_latex(background_tasks: BackgroundTasks, request: LatexRequest
     return await service.convert_to_pdf(background_tasks, tex_file_path)
 
 
-if __name__ == '__main__':
-    uvicorn.run(app, host='0.0.0.0', port=8000)
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
